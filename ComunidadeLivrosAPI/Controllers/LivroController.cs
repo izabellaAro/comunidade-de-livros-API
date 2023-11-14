@@ -65,5 +65,13 @@ public class LivroController : Controller
         return NoContent();
     }
 
-   
+    [HttpDelete("{id}")]
+    public IActionResult DeletaFilme(int id)
+    {
+        var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
+        if (livro == null) return NotFound();
+        _context.Remove(livro);
+        _context.SaveChanges();
+        return NoContent();
+    }
 }
