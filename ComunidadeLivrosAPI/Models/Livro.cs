@@ -33,4 +33,12 @@ public class Livro
         Autor = autor;
         QntPag = qntPag;
     }
+
+    public void AtualizaInfo(string titulo, string genero, string autor, int qntPag)
+    {
+        Titulo = titulo;
+        Genero = genero;
+        Autor = autor;
+        QntPag = qntPag;
+    }
 }

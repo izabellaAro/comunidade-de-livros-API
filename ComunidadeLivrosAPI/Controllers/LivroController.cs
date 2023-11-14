@@ -35,7 +35,7 @@ public class LivroController : Controller
             {
                 Autor = livro.Autor,
                 Genero = livro.Genero,
-                qntPag = livro.QntPag,
+                QntPag = livro.QntPag,
                 Titulo = livro.Titulo
             }).ToList();
     }
@@ -49,9 +49,21 @@ public class LivroController : Controller
         {
             Autor = livro.Autor,
             Genero = livro.Genero,
-            qntPag = livro.QntPag,
+            QntPag = livro.QntPag,
             Titulo = livro.Titulo
         };
         return Ok(livroDto);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult AtualizaLivro(int id, [FromBody] UpdateLivroDto livroDto)
+    {
+        var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
+        if (livro == null) return NotFound();
+        livro.AtualizaInfo(livroDto.Titulo, livroDto.Genero, livroDto.Autor, livroDto.QntPag);
+        _context.SaveChanges();
+        return NoContent();
+    }
+
+   
 }
