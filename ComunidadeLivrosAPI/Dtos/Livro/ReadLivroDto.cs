@@ -1,4 +1,6 @@
-﻿namespace ComunidadeLivrosAPI.Dtos;
+﻿using ComunidadeLivrosAPI.Dtos.Genero;
+
+namespace ComunidadeLivrosAPI.Dtos.Livro;
 
 public class ReadLivroDto
 {

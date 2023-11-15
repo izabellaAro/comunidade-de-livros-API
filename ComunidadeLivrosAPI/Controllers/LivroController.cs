@@ -1,5 +1,7 @@
 ﻿using ComunidadeLivrosAPI.Data;
 using ComunidadeLivrosAPI.Dtos;
+using ComunidadeLivrosAPI.Dtos.Genero;
+using ComunidadeLivrosAPI.Dtos.Livro;
 using ComunidadeLivrosAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ComunidadeLivrosAPI.Dtos;
+namespace ComunidadeLivrosAPI.Dtos.Livro;
 
-public class CreateLivroDto
+public class UpdateLivroDto
 {
     [Required(ErrorMessage = "O título do livro é obrigátorio")]
     public string Titulo { get; set; }

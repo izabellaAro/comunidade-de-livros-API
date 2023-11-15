@@ -1,4 +1,4 @@
-﻿namespace ComunidadeLivrosAPI.Dtos;
+﻿namespace ComunidadeLivrosAPI.Dtos.Genero;
 
 public class CreateGeneroDto
 {
