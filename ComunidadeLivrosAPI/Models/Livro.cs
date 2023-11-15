@@ -14,8 +14,8 @@ public class Livro
     public Genero Genero { get; set; }
     public int GeneroId { get; set; }
 
-    [Required(ErrorMessage = "Informar o autor do livro é obrigátorio")]
-    public string Autor { get; set; }
+    public Autor Autor { get; set; }
+    public int AutorId { get; set; }
 
     [Required]
     [Range(1, 3000, ErrorMessage = "A quantidade de páginas deve ser entre 1 e 3000")]
@@ -26,19 +26,19 @@ public class Livro
         
     }
 
-    public Livro(string titulo, int generoId, string autor, int qntPag)
+    public Livro(string titulo, int generoId, int autorId, int qntPag)
     {
         Titulo = titulo;
         GeneroId = generoId;
-        Autor = autor;
+        AutorId = autorId;
         QntPag = qntPag;
     }
 
-    public void AtualizaInfo(string titulo, int generoId, string autor, int qntPag)
+    public void AtualizaInfo(string titulo, int generoId, int autorId, int qntPag)
     {
         Titulo = titulo;
         GeneroId = generoId;
-        Autor = autor;
+        AutorId = autorId;
         QntPag = qntPag;
     }
 }

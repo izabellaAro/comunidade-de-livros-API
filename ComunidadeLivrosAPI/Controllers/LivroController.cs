@@ -1,5 +1,6 @@
 ﻿using ComunidadeLivrosAPI.Data;
 using ComunidadeLivrosAPI.Dtos;
+using ComunidadeLivrosAPI.Dtos.Autor;
 using ComunidadeLivrosAPI.Dtos.Genero;
 using ComunidadeLivrosAPI.Dtos.Livro;
 using ComunidadeLivrosAPI.Models;
@@ -22,7 +23,7 @@ public class LivroController : Controller
     [HttpPost]
     public IActionResult AdicionarLivro([FromBody] CreateLivroDto livroDto)
     {
-        var livro = new Livro(livroDto.Titulo, livroDto.GeneroId, livroDto.Autor, livroDto.QntPag);
+        var livro = new Livro(livroDto.Titulo, livroDto.GeneroId, livroDto.AutorId, livroDto.QntPag);
         _context.Livros.Add(livro);
         _context.SaveChanges();
         return NoContent();
@@ -33,12 +34,13 @@ public class LivroController : Controller
     {
         var consultaLivros = _context.Livros
             .Include(livro => livro.Genero)
+            .Include(livro => livro.Autor)
             .Skip(skip).Take(take);
 
         return consultaLivros.Select(livro =>
             new ReadLivroDto
             {
-                Autor = livro.Autor,
+                Autor = new ReadAutorDto { Id = livro.Autor.Id, Nome = livro.Autor.Nome },
                 Genero = new ReadGeneroDto { Id = livro.Genero.Id, Nome = livro.Genero.Nome },
                 QntPag = livro.QntPag,
                 Titulo = livro.Titulo
@@ -50,12 +52,13 @@ public class LivroController : Controller
     {
         var livro = _context.Livros
             .Include(livro => livro.Genero)
+            .Include(livro => livro.Autor)
             .FirstOrDefault(livro => livro.Id == id);
         
         if (livro == null) return NotFound();
         var livroDto = new ReadLivroDto
         {
-            Autor = livro.Autor,
+            Autor = new ReadAutorDto { Id = livro.Autor.Id, Nome = livro.Autor.Nome },
             Genero = new ReadGeneroDto { Id = livro.Genero.Id, Nome = livro.Genero.Nome },
             QntPag = livro.QntPag,
             Titulo = livro.Titulo
@@ -68,7 +71,7 @@ public class LivroController : Controller
     {
         var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
         if (livro == null) return NotFound();
-        livro.AtualizaInfo(livroDto.Titulo, livroDto.GeneroId, livroDto.Autor, livroDto.QntPag);
+        livro.AtualizaInfo(livroDto.Titulo, livroDto.GeneroId, livroDto.AutorId, livroDto.QntPag);
         _context.SaveChanges();
         return NoContent();
     }
