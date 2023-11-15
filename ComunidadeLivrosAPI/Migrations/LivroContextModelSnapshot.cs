@@ -18,6 +18,21 @@ namespace ComunidadeLivrosAPI.Migrations
                 .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ComunidadeLivrosAPI.Models.Autor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Autores");
+                });
+
             modelBuilder.Entity("ComunidadeLivrosAPI.Models.Genero", b =>
                 {
                     b.Property<int>("Id")
