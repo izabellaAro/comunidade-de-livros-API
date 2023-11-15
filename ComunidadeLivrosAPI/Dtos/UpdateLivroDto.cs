@@ -8,7 +8,7 @@ public class UpdateLivroDto
     public string Titulo { get; set; }
 
     [Required(ErrorMessage = "O gênero do filme é obrigátorio")]
-    public string Genero { get; set; }
+    public int GeneroId { get; set; }
 
     [Required(ErrorMessage = "Informar o autor do livro é obrigátorio")]
     public string Autor { get; set; }

@@ -11,8 +11,8 @@ public class Livro
     [Required(ErrorMessage = "O título do livro é obrigátorio")]
     public string Titulo { get; set; }
 
-    [Required(ErrorMessage = "O gênero do filme é obrigátorio")]
-    public string Genero { get; set; }
+    public Genero Genero { get; set; }
+    public int GeneroId { get; set; }
 
     [Required(ErrorMessage = "Informar o autor do livro é obrigátorio")]
     public string Autor { get; set; }
@@ -26,18 +26,18 @@ public class Livro
         
     }
 
-    public Livro(string titulo, string genero, string autor, int qntPag)
+    public Livro(string titulo, int generoId, string autor, int qntPag)
     {
         Titulo = titulo;
-        Genero = genero;
+        GeneroId = generoId;
         Autor = autor;
         QntPag = qntPag;
     }
 
-    public void AtualizaInfo(string titulo, string genero, string autor, int qntPag)
+    public void AtualizaInfo(string titulo, int generoId, string autor, int qntPag)
     {
         Titulo = titulo;
-        Genero = genero;
+        GeneroId = generoId;
         Autor = autor;
         QntPag = qntPag;
     }
