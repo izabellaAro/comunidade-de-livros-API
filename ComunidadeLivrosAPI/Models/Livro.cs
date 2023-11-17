@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ComunidadeLivrosAPI.Migrations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ComunidadeLivrosAPI.Models;
 
@@ -20,6 +21,7 @@ public class Livro
     [Required]
     [Range(1, 3000, ErrorMessage = "A quantidade de páginas deve ser entre 1 e 3000")]
     public int QntPag { get; set; }
+    public List<Resenha> Resenhas { get; set; }
 
     public Livro()
     {

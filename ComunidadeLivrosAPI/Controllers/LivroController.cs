@@ -3,6 +3,7 @@ using ComunidadeLivrosAPI.Dtos;
 using ComunidadeLivrosAPI.Dtos.Autor;
 using ComunidadeLivrosAPI.Dtos.Genero;
 using ComunidadeLivrosAPI.Dtos.Livro;
+using ComunidadeLivrosAPI.Dtos.Resenha;
 using ComunidadeLivrosAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ public class LivroController : Controller
         var consultaLivros = _context.Livros
             .Include(livro => livro.Genero)
             .Include(livro => livro.Autor)
+            .Include(livro => livro.Resenhas)
             .Skip(skip).Take(take);
 
         return consultaLivros.Select(livro =>
@@ -42,6 +44,13 @@ public class LivroController : Controller
             {
                 Autor = new ReadAutorDto { Id = livro.Autor.Id, Nome = livro.Autor.Nome },
                 Genero = new ReadGeneroDto { Id = livro.Genero.Id, Nome = livro.Genero.Nome },
+                Resenhas = livro.Resenhas
+                    .Select(resenha => new ReadResenhaDto 
+                    { 
+                        Id = resenha.Id,
+                        LivroId = resenha.LivroId, 
+                        TextoResenha = resenha.TextoResenha 
+                    }).ToList(),
                 QntPag = livro.QntPag,
                 Titulo = livro.Titulo
             }).ToList();
@@ -53,6 +62,7 @@ public class LivroController : Controller
         var livro = _context.Livros
             .Include(livro => livro.Genero)
             .Include(livro => livro.Autor)
+            .Include(livro => livro.Resenhas)
             .FirstOrDefault(livro => livro.Id == id);
         
         if (livro == null) return NotFound();
@@ -60,6 +70,13 @@ public class LivroController : Controller
         {
             Autor = new ReadAutorDto { Id = livro.Autor.Id, Nome = livro.Autor.Nome },
             Genero = new ReadGeneroDto { Id = livro.Genero.Id, Nome = livro.Genero.Nome },
+            Resenhas = livro.Resenhas
+                    .Select(resenha => new ReadResenhaDto
+                    {
+                        Id = resenha.Id,
+                        LivroId = resenha.LivroId,
+                        TextoResenha = resenha.TextoResenha
+                    }).ToList(),
             QntPag = livro.QntPag,
             Titulo = livro.Titulo
         };
@@ -77,7 +94,7 @@ public class LivroController : Controller
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeletaFilme(int id)
+    public IActionResult DeletaLivro(int id)
     {
         var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
         if (livro == null) return NotFound();
