@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ComunidadeLivrosAPI.Dtos;
+namespace ComunidadeLivros.Application.Models.Livro;
 
-public class UpdateLivroDto
+public class CreateLivroDto
 {
     [Required(ErrorMessage = "O título do livro é obrigátorio")]
     public string Titulo { get; set; }
 
     [Required(ErrorMessage = "O gênero do filme é obrigátorio")]
-    public string Genero { get; set; }
+    public int GeneroId { get; set; }
 
     [Required(ErrorMessage = "Informar o autor do livro é obrigátorio")]
-    public string Autor { get; set; }
+    public int AutorId { get; set; }
 
     [Required]
     [Range(1, 3000, ErrorMessage = "A quantidade de páginas deve ser entre 1 e 3000")]

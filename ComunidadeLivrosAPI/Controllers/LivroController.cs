@@ -1,6 +1,5 @@
-﻿using ComunidadeLivrosAPI.Data;
-using ComunidadeLivrosAPI.Dtos;
-using ComunidadeLivrosAPI.Models;
+﻿using ComunidadeLivros.Application.Models.Livro;
+using ComunidadeLivros.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComunidadeLivrosAPI.Controllers;
@@ -9,69 +8,49 @@ namespace ComunidadeLivrosAPI.Controllers;
 [Route("[controller]")]
 public class LivroController : Controller
 {
-    private LivroContext _context;
+    private readonly ILivroService _livroService;
 
-    public LivroController(LivroContext context)
+    public LivroController(ILivroService livroService)
     {
-        _context = context;
+        _livroService = livroService;
     }
 
     [HttpPost]
-    public IActionResult AdicionarLivro([FromBody] CreateLivroDto livroDto)
+    public async Task<IActionResult> AdicionarLivro([FromBody] CreateLivroDto livroDto)
     {
-        var livro = new Livro(livroDto.Titulo, livroDto.Genero, livroDto.Autor, livroDto.QntPag);
-        _context.Livros.Add(livro);
-        _context.SaveChanges();
+        await _livroService.CadastarLivro(livroDto);
         return NoContent();
     }
 
     [HttpGet]
-    public IEnumerable<ReadLivroDto> ConsultaLivros([FromQuery] int skip = 0, [FromQuery] int take = 50)
+    public async Task<IEnumerable<ReadLivroDto>> ConsultaLivros([FromQuery] int skip = 0, [FromQuery] int take = 50)
     {
-        var consultaLivros = _context.Livros.Skip(skip).Take(take);
-
-        return consultaLivros.Select(livro =>
-            new ReadLivroDto
-            {
-                Autor = livro.Autor,
-                Genero = livro.Genero,
-                QntPag = livro.QntPag,
-                Titulo = livro.Titulo
-            }).ToList();
+        return await _livroService.ConsultarLivros(skip, take);
     }
 
     [HttpGet("{id}")]
-    public IActionResult ConsultaLivroPorId(int id)
+    public async Task<IActionResult> ConsultaLivroPorId(int id)
     {
-        var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
+        var livro = await _livroService.ConsultarLivroPorId(id);
+
         if (livro == null) return NotFound();
-        var livroDto = new ReadLivroDto
-        {
-            Autor = livro.Autor,
-            Genero = livro.Genero,
-            QntPag = livro.QntPag,
-            Titulo = livro.Titulo
-        };
-        return Ok(livroDto);
+
+        return Ok(livro);
     }
 
     [HttpPut("{id}")]
-    public IActionResult AtualizaLivro(int id, [FromBody] UpdateLivroDto livroDto)
+    public async Task<IActionResult> AtualizaLivro(int id, [FromBody] UpdateLivroDto livroDto)
     {
-        var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
-        if (livro == null) return NotFound();
-        livro.AtualizaInfo(livroDto.Titulo, livroDto.Genero, livroDto.Autor, livroDto.QntPag);
-        _context.SaveChanges();
+        var livroAtualizado = await _livroService.AtualizarLivro(id, livroDto);
+        if (livroAtualizado == false) return NotFound();
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeletaFilme(int id)
+    public async Task<IActionResult> DeletaLivro(int id)
     {
-        var livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
-        if (livro == null) return NotFound();
-        _context.Remove(livro);
-        _context.SaveChanges();
+        var livro = await _livroService.DeletarLivro(id);
+        if (livro == false) return NotFound();
         return NoContent();
     }
 }
