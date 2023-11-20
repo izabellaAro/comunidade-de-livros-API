@@ -1,7 +1,5 @@
-﻿using ComunidadeLivrosAPI.Data;
-using ComunidadeLivrosAPI.Dtos.Resenha;
-using ComunidadeLivrosAPI.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ComunidadeLivros.Application.Models.Resenha;
+using ComunidadeLivros.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComunidadeLivrosAPI.Controllers;
@@ -10,33 +8,23 @@ namespace ComunidadeLivrosAPI.Controllers;
 [ApiController]
 public class ResenhaController : ControllerBase
 {
-    private LivroContext _context;
+    private readonly IResenhaService _resenhaService;
 
-    public ResenhaController(LivroContext context)
+    public ResenhaController(IResenhaService resenhaService)
     {
-        _context = context;
+        _resenhaService = resenhaService;
     }
 
     [HttpPost]
-    public IActionResult AdicionaResenha([FromBody] CreateResenhaDto resenhaDto)
+    public async Task<IActionResult> AdicionaResenha([FromBody] CreateResenhaDto resenhaDto)
     {
-        var resenha = new Resenha(resenhaDto.LivroId, resenhaDto.TextoResenha);
-        _context.Add(resenha);
-        _context.SaveChanges();
+        await _resenhaService.CadastrarResenha(resenhaDto);
         return NoContent();
     }
 
     [HttpGet]
-    public IEnumerable<ReadResenhaDto> ConsultaResenhas([FromQuery] int skip = 0, [FromQuery] int take = 10)
+    public async Task<IEnumerable<ReadResenhaDto>> ConsultaResenhas([FromQuery] int skip = 0, [FromQuery] int take = 10)
     {
-        var consultaResenhas = _context.Resenhas.Skip(skip).Take(take);
-
-        return consultaResenhas.Select(resenha =>
-            new ReadResenhaDto
-            {
-                Id = resenha.Id,
-                LivroId = resenha.LivroId,
-                TextoResenha = resenha.TextoResenha
-            }).ToList();
+        return await _resenhaService.ConsultarResenhas(skip, take);
     }
 }

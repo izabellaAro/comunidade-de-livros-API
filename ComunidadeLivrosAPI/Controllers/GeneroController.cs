@@ -1,7 +1,5 @@
-﻿using ComunidadeLivrosAPI.Data;
-using ComunidadeLivrosAPI.Dtos.Genero;
-using ComunidadeLivrosAPI.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ComunidadeLivros.Application.Models.Genero;
+using ComunidadeLivros.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComunidadeLivrosAPI.Controllers;
@@ -10,32 +8,23 @@ namespace ComunidadeLivrosAPI.Controllers;
 [ApiController]
 public class GeneroController : ControllerBase
 {
-    private LivroContext _context;
+    private readonly IGeneroService _generoService;
 
-    public GeneroController(LivroContext context)
+    public GeneroController(IGeneroService generoService)
     {
-        _context = context;
+        _generoService = generoService;
     }
 
     [HttpPost]
-    public IActionResult AdicionarGenero([FromBody] CreateGeneroDto generoDto)
+    public async Task<IActionResult> AdicionarGenero([FromBody] CreateGeneroDto generoDto)
     {
-        var genero = new Genero(generoDto.Nome);
-        _context.Add(genero);
-        _context.SaveChanges();
+        await _generoService.CadastrarGenero(generoDto);
         return NoContent();
     }
 
     [HttpGet]
-    public IEnumerable<ReadGeneroDto> ConsultaGeneros([FromQuery] int skip = 0, [FromQuery] int take = 10)
+    public async Task<IEnumerable<ReadGeneroDto>> ConsultaGeneros([FromQuery] int skip = 0, [FromQuery] int take = 10)
     {
-        var consultaGenero = _context.Generos.Skip(skip).Take(take);
-
-        return consultaGenero.Select(genero =>
-            new ReadGeneroDto
-            {
-                Id = genero.Id,
-                Nome = genero.Nome
-            }).ToList();
+        return await _generoService.ConsultarGeneros(skip, take);
     }
 }

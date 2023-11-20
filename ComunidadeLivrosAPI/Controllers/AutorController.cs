@@ -1,7 +1,5 @@
-﻿using ComunidadeLivrosAPI.Data;
-using ComunidadeLivrosAPI.Dtos.Autor;
-using ComunidadeLivrosAPI.Dtos.Genero;
-using ComunidadeLivrosAPI.Models;
+﻿using ComunidadeLivros.Application.Models.Autor;
+using ComunidadeLivros.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComunidadeLivrosAPI.Controllers;
@@ -10,32 +8,23 @@ namespace ComunidadeLivrosAPI.Controllers;
 [ApiController]
 public class AutorController : ControllerBase
 {
-    private LivroContext _context;
+    private readonly IAutorService _autorService;
 
-    public AutorController(LivroContext context)
+    public AutorController(IAutorService autorService)
     {
-        _context = context;
+        _autorService = autorService;
     }
 
     [HttpPost]
-    public IActionResult AdicionarAutor([FromBody] CreateAutorDto autorDto)
+    public async Task<IActionResult> AdicionarAutor([FromBody] CreateAutorDto autorDto)
     {
-        var autor = new Autor (autorDto.Nome);
-        _context.Add(autor);
-        _context.SaveChanges();
+        await _autorService.CadastrarAutor(autorDto);
         return NoContent();
     }
 
     [HttpGet]
-    public IEnumerable<ReadAutorDto> ConsultaAutores([FromQuery] int skip = 0, [FromQuery] int take = 10)
+    public async Task<IEnumerable<ReadAutorDto>> ConsultaAutores([FromQuery] int skip = 0, [FromQuery] int take = 10)
     {
-        var consultaAutores = _context.Autores.Skip(skip).Take(take);
-
-        return consultaAutores.Select(autor =>
-            new ReadAutorDto
-            {
-                Id = autor.Id,
-                Nome = autor.Nome
-            }).ToList();
+        return await _autorService.ConsultarAutores(skip, take);
     }
 }
