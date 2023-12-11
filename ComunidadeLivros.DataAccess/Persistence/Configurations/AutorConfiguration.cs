@@ -10,5 +10,6 @@ public class AutorConfiguration : IEntityTypeConfiguration<Autor>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Nome).HasMaxLength(200).IsRequired();
+        builder.HasOne(x => x.GeneroAutor).WithMany().HasForeignKey(x => x.GeneroId).IsRequired(false);
     }
 }

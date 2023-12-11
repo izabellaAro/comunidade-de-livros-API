@@ -15,7 +15,7 @@ public class ResenhaService : IResenhaService
     }
     public async Task CadastrarResenha(CreateResenhaDto resenhaDto)
     {
-        var resenha = new Resenha(resenhaDto.LivroId, resenhaDto.TextoResenha);
+        var resenha = new Resenha(resenhaDto.LivroId, resenhaDto.TextoResenha, resenhaDto.TituloResenha);
         await _resenhaRepository.AddAsync(resenha);
     }
 
@@ -27,8 +27,12 @@ public class ResenhaService : IResenhaService
             new ReadResenhaDto
             {
                 Id = resenha.Id,
+                TituloResenha = resenha.TituloResenha,
+                TextoResenha = resenha.TextoResenha,
                 LivroId = resenha.LivroId,
-                TextoResenha = resenha.TextoResenha
+                TituloLivro = resenha.Livro.Titulo,
+                NomeGenero = resenha.Livro.Genero.Nome,
+                NomeAutor = resenha.Livro.Autor.Nome
             }).ToList();
     }
 }

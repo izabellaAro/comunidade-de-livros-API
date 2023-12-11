@@ -10,5 +10,7 @@ public class ResenhaConfiguration : IEntityTypeConfiguration<Resenha>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.TextoResenha).HasMaxLength(3000).IsRequired();
+        builder.Property(x => x.TituloResenha).HasMaxLength(300).IsRequired();
+
     }
 }

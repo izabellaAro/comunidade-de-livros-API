@@ -9,7 +9,6 @@ namespace ComunidadeLivrosAPI.Controllers;
 public class AutorController : ControllerBase
 {
     private readonly IAutorService _autorService;
-
     public AutorController(IAutorService autorService)
     {
         _autorService = autorService;
