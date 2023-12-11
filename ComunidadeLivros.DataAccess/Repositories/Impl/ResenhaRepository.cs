@@ -12,6 +12,10 @@ public class ResenhaRepository : BaseRepository<Resenha>, IResenhaRepository
 
     public async Task<IEnumerable<Resenha>> ConsultarResenhas(int skip, int take)
     {
-        return await _dbSet.Skip(skip).Take(take).ToListAsync();
+        return await _dbSet
+            .Include(x => x.Livro)
+                .ThenInclude(x => x.Genero)
+            .Include(x => x.Livro.Autor)
+            .Skip(skip).Take(take).ToListAsync();
     }
 }
