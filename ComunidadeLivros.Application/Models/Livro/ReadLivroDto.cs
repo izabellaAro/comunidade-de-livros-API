@@ -6,6 +6,7 @@ namespace ComunidadeLivros.Application.Models.Livro;
 
 public class ReadLivroDto
 {
+    public int Id { get; set; }
     public string Titulo { get; set; }
     public ReadGeneroDto Genero { get; set; }
     public ReadAutorDto Autor { get; set; }
