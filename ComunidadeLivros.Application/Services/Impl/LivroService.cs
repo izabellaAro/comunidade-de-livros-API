@@ -60,6 +60,7 @@ public class LivroService : ILivroService
         return consultaLivros.Select(livro =>
             new ReadLivroDto
             {
+                Id = livro.Id,
                 Autor = new ReadAutorDto { Id = livro.Autor.Id, Nome = livro.Autor.Nome },
                 Genero = new ReadGeneroDto { Id = livro.Genero.Id, Nome = livro.Genero.Nome },
                 Resenhas = livro.Resenhas
