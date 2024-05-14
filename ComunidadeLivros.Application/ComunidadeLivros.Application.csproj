@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.7.303.29" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.307.31" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ComunidadeLivros.DataAccess\ComunidadeLivros.DataAccess.csproj" />
   </ItemGroup>
 

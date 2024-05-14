@@ -28,5 +28,9 @@ public class LivroConfiguration : IEntityTypeConfiguration<Livro>
         builder.HasMany(x => x.Resenhas)
             .WithOne(x => x.Livro)
             .HasForeignKey(x => x.LivroId);
+
+        builder.Property(x => x.ChaveImg)
+            .HasMaxLength(120)
+            .IsRequired(false);
     }
 }

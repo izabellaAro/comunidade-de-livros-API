@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace ComunidadeLivros.Core.Entities;
 
@@ -19,6 +20,7 @@ public class Livro
     [Range(1, 3000, ErrorMessage = "A quantidade de páginas deve ser entre 1 e 3000")]
     public int QntPag { get; set; }
     public List<Resenha> Resenhas { get; set; }
+    public string ChaveImg { get; set; }  
 
     public Livro()
     {
@@ -39,5 +41,10 @@ public class Livro
         GeneroId = generoId;
         AutorId = autorId;
         QntPag = qntPag;
+    }
+
+    public void AdicionarChaveImg(string chaveImg)
+    {
+        ChaveImg = chaveImg;
     }
 }

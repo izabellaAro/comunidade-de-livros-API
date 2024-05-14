@@ -1,4 +1,5 @@
 ﻿using ComunidadeLivros.Application.Models.Livro;
+using Microsoft.AspNetCore.Http;
 
 namespace ComunidadeLivros.Application.Services;
 
@@ -9,4 +10,5 @@ public interface ILivroService
     Task CadastarLivro(CreateLivroDto livroDto);
     Task<bool> AtualizarLivro(int id, UpdateLivroDto livroDto);
     Task<bool> DeletarLivro(int id);
+    Task<bool> AdicionarImg(AddArquivoLivroDto arquivoDto);
 }
