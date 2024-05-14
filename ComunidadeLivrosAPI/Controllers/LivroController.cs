@@ -53,4 +53,17 @@ public class LivroController : Controller
         if (livro == false) return NotFound();
         return NoContent();
     }
+
+    [HttpPost("img")]
+    public async Task<IActionResult> AdicionarArquivo([FromForm] AddArquivoLivroDto arquivoDto)
+    {
+        var imgEnviada = await _livroService.AdicionarImg(arquivoDto);
+
+        if (!imgEnviada)
+        {
+            return BadRequest("Erro ao enviar imagem.");
+        }
+
+        return Ok();
+    }
 }

@@ -4,16 +4,19 @@ using ComunidadeLivros.Application.Models.Livro;
 using ComunidadeLivros.Application.Models.Resenha;
 using ComunidadeLivros.Core.Entities;
 using ComunidadeLivros.DataAccess.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace ComunidadeLivros.Application.Services.Impl;
 
 public class LivroService : ILivroService
 {
     private readonly ILivroRepository _livroRepository;
+    private readonly IAmazonS3Service _amazonS3Service;
 
-    public LivroService(ILivroRepository livroRepository)
+    public LivroService(ILivroRepository livroRepository, IAmazonS3Service amazonS3Service)
     {
         _livroRepository = livroRepository;
+        _amazonS3Service = amazonS3Service;
     }
 
     public async Task<bool> AtualizarLivro(int id,UpdateLivroDto livroDto)
@@ -80,6 +83,29 @@ public class LivroService : ILivroService
         var livro = await _livroRepository.ConsultarLivroPorId(id);
         if (livro == null) return false;
         await _livroRepository.DeleteAsync(livro);
+        return true;
+    }
+
+    public async Task<bool> AdicionarImg(AddArquivoLivroDto arquivoDto)
+    {
+        var livro = await _livroRepository.ConsultarLivroPorId(arquivoDto.LivroId);
+
+        if (livro == null)
+        {
+            return false;
+        }
+
+        var key = "medias/" + Guid.NewGuid();
+        var arquivoEnviado = await _amazonS3Service.EnviarArquivo("imagenslivro", key, arquivoDto.Arquivo);
+
+        if (!arquivoEnviado)
+        {
+            return false;
+        }
+
+        livro.AdicionarChaveImg(key);
+        await _livroRepository.UpdateAsync(livro);
+
         return true;
     }
 }
